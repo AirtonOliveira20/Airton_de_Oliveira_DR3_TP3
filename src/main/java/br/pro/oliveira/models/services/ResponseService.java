@@ -21,4 +21,5 @@ public interface ResponseService {
     @POST("/posts")
     Call<ApiAuxiliar> createPost(@Body ApiAuxiliar post);
 
+
 }

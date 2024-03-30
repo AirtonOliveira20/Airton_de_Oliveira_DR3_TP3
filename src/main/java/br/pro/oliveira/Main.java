@@ -20,7 +20,7 @@ public class Main
 
     }
 
-    public static void exibirMenu(){
+    public static void exibirMenu() throws IOException {
 
         Scanner scanner = new Scanner(System.in);
         boolean sair = false;
@@ -29,6 +29,8 @@ public class Main
             System.out.println("1. Exibir Lista");
             System.out.println("2. Exibir Item");
             System.out.println("3. Inserir Item");
+            System.out.println("4. Exibir tarefas concluidas");
+            System.out.println("5. Marcar tarefa como concluida");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
             int opcao = scanner.nextInt();
@@ -42,6 +44,14 @@ public class Main
                 case 3:
                     inserirItem();
                     break;
+                case 4:
+                    exibirTarefasConcluidas();
+                    break;
+
+                case 5:
+                    marcarTarefaConcluida();
+                    break;
+
                 case 0:
                     sair = true;
                     System.out.println("Saindo do programa...");
@@ -136,6 +146,49 @@ public class Main
 
        });
    }
+
+   public static void marcarTarefaConcluida(){
+       try {
+           Call<APIResposta> call = ApiEncapsulamento.getResponseService().show(1);
+           Response<APIResposta> resp = call.execute();
+
+           if (resp.isSuccessful()) {
+               APIResposta tarefa = resp.body();
+               tarefa.completed = true;
+
+               exibirItemDetalhado(tarefa);
+
+           } else {
+               System.out.println("Erro ao obter detalhes da tarefa.");
+           }
+       } catch (IOException e) {
+           throw new RuntimeException(e);
+       }
+   }
+
+
+    public static void exibirTarefasConcluidas() throws IOException {
+       System.out.println("1. Filtrar por Tarefas Concluídas");
+
+       try {
+           Call<List<APIResposta>> call = ApiEncapsulamento.getResponseService().list();
+           Response<List<APIResposta>> resp = call.execute();
+
+           if (resp.isSuccessful()) {
+               List<APIResposta> listaTarefas = resp.body();
+               System.out.println("Tarefas Concluídas: ");
+               for (APIResposta tarefa : listaTarefas) {
+                   if (tarefa.completed == true ) {
+                       exibirItemDetalhado(tarefa);
+                   }
+               }
+           } else {
+               System.out.println("Erro ao obter lista de tarefas.");
+           }
+       } catch (IOException e) {
+           throw new RuntimeException(e);
+       }
+    }
 
     public static void exibirItemDetalhado(APIResposta item) {
         System.out.println("ID: " + item.id);

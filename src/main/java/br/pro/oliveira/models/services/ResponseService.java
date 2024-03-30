@@ -1,7 +1,7 @@
 package br.pro.oliveira.models.services;
 
 import br.pro.oliveira.models.APIResposta;
-import br.pro.oliveira.models.JsonUni;
+import br.pro.oliveira.models.ApiAuxiliar;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -19,6 +19,6 @@ public interface ResponseService {
     Call<APIResposta> show(@Path("id") int id);
 
     @POST("/posts")
-    Call<JsonUni> createPost(@Body JsonUni post);
+    Call<ApiAuxiliar> createPost(@Body ApiAuxiliar post);
 
 }

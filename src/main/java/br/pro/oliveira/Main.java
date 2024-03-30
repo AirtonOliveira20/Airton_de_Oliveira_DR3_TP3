@@ -1,7 +1,7 @@
 package br.pro.oliveira;
 
 import br.pro.oliveira.models.APIResposta;
-import br.pro.oliveira.models.JsonUni;
+import br.pro.oliveira.models.ApiAuxiliar;
 import br.pro.oliveira.models.services.ResponseService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,7 +54,7 @@ public class Main
 
     public static void exibirLista(){
         try {
-            Call<List<APIResposta>> call = ApiClient.getResponseService().list();
+            Call<List<APIResposta>> call = ApiEncapsulamento.getResponseService().list();
 
             Response<List<APIResposta>> resp = call.execute();
 
@@ -77,7 +77,7 @@ public class Main
             System.out.println("Qual item deseja exibir?:");
             int id = scanner.nextInt();
 
-            Call<APIResposta> call = ApiClient
+            Call<APIResposta> call = ApiEncapsulamento
                     .getResponseService()
                     .show(id);
 
@@ -98,8 +98,8 @@ public class Main
     }
 
     public static void inserirItem(){
-        ResponseService respostasService = ApiClient.getResponseService();
-        JsonUni novoItem = new JsonUni();
+        ResponseService respostasService = ApiEncapsulamento.getResponseService();
+        ApiAuxiliar novoItem = new ApiAuxiliar();
 
         System.out.println("Preencha os dados do novo item:");
         System.out.print("ID: ");
@@ -111,15 +111,15 @@ public class Main
         System.out.print("UserId: ");
         novoItem.setUserId(scanner.nextInt());
 
-        Call<JsonUni> call = respostasService.createPost(novoItem);
-        call.enqueue(new Callback<JsonUni>() {
+        Call<ApiAuxiliar> call = respostasService.createPost(novoItem);
+        call.enqueue(new Callback<ApiAuxiliar>() {
             @Override
-            public void onResponse(Call<JsonUni> call, Response<JsonUni> response) {
+            public void onResponse(Call<ApiAuxiliar> call, Response<ApiAuxiliar> response) {
                 if (response.isSuccessful()) {
-                    JsonUni jsonUni = response.body();
+                    ApiAuxiliar apiAuxiliar = response.body();
                     System.out.println("Item inserido:");
 
-                    exibirItemDetalhado(jsonUni);
+                    exibirItemDetalhado(apiAuxiliar);
 
 
                 } else {
@@ -128,7 +128,7 @@ public class Main
             }
 
             @Override
-            public void onFailure(Call<JsonUni> call, Throwable throwable) {
+            public void onFailure(Call<ApiAuxiliar> call, Throwable throwable) {
 
                 System.err.println("Erro na requisição: " + throwable.getMessage());
 
@@ -145,7 +145,7 @@ public class Main
         System.out.println("-----------------------");
     }
 
-    public static void exibirItemDetalhado(JsonUni item) {
+    public static void exibirItemDetalhado(ApiAuxiliar item) {
         System.out.println("ID: " + item.id);
         System.out.println("Title: " + item.title);
         System.out.println("Body: " + item.body);

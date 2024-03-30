@@ -2,7 +2,7 @@ package br.pro.oliveira.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class JsonUni {
+public class ApiAuxiliar {
         @SerializedName("id")
         public int id;
         @SerializedName("title")
